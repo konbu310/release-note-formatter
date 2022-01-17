@@ -3,7 +3,7 @@ use regex::Regex;
 
 fn format_release_note(note: &str) -> String {
     let url_re = Regex::new(r"https://github.com/.+/.+/pull/(\d+)").unwrap();
-    let list_re = Regex::new(r"^\* ").unwrap();
+    let list_symbol_re = Regex::new(r"^\* ").unwrap();
 
     let mut ret = String::from("");
     for line in note.lines() {
@@ -12,10 +12,10 @@ fn format_release_note(note: &str) -> String {
         let num = caps.get(1).unwrap().as_str();
         let fmt = format!("[#{} {}]", num, url);
         let res = url_re.replace(line, fmt);
-        let res = list_re.replace(&res, " ");
-        ret = format!("{}{}\n", ret, res);
+        let res = list_symbol_re.replace(&res, " ");
+        ret = ret + &res + "\n";
     }
-    ret
+    ret.trim_end().to_string()
 }
 
 fn app(cx: Scope) -> Element {
@@ -39,4 +39,20 @@ fn app(cx: Scope) -> Element {
 
 fn main() {
     dioxus::desktop::launch(app);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn format_one_line() {
+        let ret = format_release_note(
+            "* hogehoge by @konbu310 in https://github.com/konbu310/hyper-launcher/pull/1",
+        );
+        assert_eq!(
+            ret,
+            " hogehoge by @konbu310 in [#1 https://github.com/konbu310/hyper-launcher/pull/1]"
+        );
+    }
 }
