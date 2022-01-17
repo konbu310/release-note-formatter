@@ -1,0 +1,2 @@
+# release-note-formatter
+githubが自動生成するMarkdownのリリースノートをScrapbox用に変換するよ
