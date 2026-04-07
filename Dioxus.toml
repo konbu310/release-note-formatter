@@ -1,5 +1,6 @@
 [application]
-out_dir = "."
+out_dir = "docs"
+public_dir = "static"
 
 [web.app]
 

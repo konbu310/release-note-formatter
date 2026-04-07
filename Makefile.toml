@@ -1,0 +1,29 @@
+[tasks.clean_docs]
+description = "Remove the generated docs directory."
+command = "sh"
+args = [
+  "-ceu",
+  "rm -rf docs target/dx/release-note-formatter/release/web/public && mkdir -p docs",
+]
+
+[tasks.bundle_docs]
+description = "Build the web bundle into docs/public."
+command = "dx"
+args = ["bundle", "--web", "--release", "--debug-symbols", "false", "--out-dir", "docs"]
+
+[tasks.flatten_docs]
+description = "Move the Dioxus web bundle from docs/public into docs."
+command = "sh"
+args = [
+  "-ceu",
+  "if [ ! -d docs/public ]; then echo 'docs/public was not generated' >&2; exit 1; fi; find docs/public -mindepth 1 -maxdepth 1 -exec mv {} docs/ \\; && rmdir docs/public",
+]
+
+[tasks.pages]
+description = "Build the GitHub Pages bundle into ./docs."
+dependencies = ["clean_docs", "bundle_docs", "flatten_docs"]
+
+[tasks.serve]
+description = "Serve the generated docs directory on localhost:8080."
+command = "npx"
+args = ["serve", "docs"]
