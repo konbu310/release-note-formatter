@@ -35,7 +35,7 @@ index.write_text(html)
 
 for js_path in Path("docs/assets").glob("*.js"):
     text = js_path.read_text()
-    text = re.sub(r'/\./assets/([^"\']+\.wasm)', r'./\1', text)
+    text = re.sub(r'/\./assets/([^"\']+\.wasm)', r'./assets/\1', text)
     js_path.write_text(text)
 ''',
 ]
