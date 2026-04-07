@@ -20,12 +20,12 @@ fn format_release_note(note: &str) -> String {
     ret.trim_end().to_string()
 }
 
-fn app(cx: Scope) -> Element {
-    let value = use_state(&cx, || String::from(""));
+fn app() -> Element {
+    let mut value = use_signal(|| String::from(""));
 
-    let formatted = format_release_note(&value);
+    let formatted = format_release_note(&value.read());
 
-    cx.render(rsx!(
+    rsx!(
         h1 {
             style: "\
                 width: 100%;\
@@ -49,7 +49,7 @@ fn app(cx: Scope) -> Element {
                     resize: none\
                     ",
                 oninput: move |ev| {
-                    value.set(ev.value.clone());
+                  *value.write() = ev.clone().value();
                 },
                 placeholder: "リリースノートのMarkdownを貼り付けてね",
             }
@@ -63,11 +63,11 @@ fn app(cx: Scope) -> Element {
                 value: "{formatted}"
             }
         }
-    ))
+    )
 }
 
 fn main() {
-    dioxus::web::launch(app);
+    dioxus::launch(app);
 }
 
 #[cfg(test)]
