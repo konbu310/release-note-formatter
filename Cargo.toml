@@ -6,6 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dioxus = { version = "0.1.7", features = ["web"] }
-regex = "1.5.4"
-wasm-bindgen = "0.2.79"
+dioxus = { version = "0.7", features = ["web"] }
+gloo-timers = { version = "0.3.0", features = ["futures"] }
+regex = "1.12.3"
+wasm-bindgen = "0.2.117"
+wasm-bindgen-futures = "0.4.55"
+web-sys = { version = "0.3.82", features = ["Clipboard", "Navigator", "Window"] }
