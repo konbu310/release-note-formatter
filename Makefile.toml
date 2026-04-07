@@ -19,9 +19,30 @@ args = [
   "if [ ! -d docs/public ]; then echo 'docs/public was not generated' >&2; exit 1; fi; find docs/public -mindepth 1 -maxdepth 1 -exec mv {} docs/ \\; && rmdir docs/public",
 ]
 
+[tasks.fix_pages_paths]
+description = "Rewrite absolute asset paths for GitHub Pages."
+command = "python"
+args = [
+  "-c",
+  '''
+from pathlib import Path
+import re
+
+index = Path("docs/index.html")
+html = index.read_text()
+html = html.replace("/./assets/", "./assets/")
+index.write_text(html)
+
+for js_path in Path("docs/assets").glob("*.js"):
+    text = js_path.read_text()
+    text = re.sub(r'/\./assets/([^"\']+\.wasm)', r'./\1', text)
+    js_path.write_text(text)
+''',
+]
+
 [tasks.pages]
 description = "Build the GitHub Pages bundle into ./docs."
-dependencies = ["clean_docs", "bundle_docs", "flatten_docs"]
+dependencies = ["clean_docs", "bundle_docs", "flatten_docs", "fix_pages_paths"]
 
 [tasks.serve]
 description = "Serve the generated docs directory on localhost:8080."
