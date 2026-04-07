@@ -3,8 +3,6 @@ use gloo_timers::future::TimeoutFuture;
 use regex::Regex;
 use wasm_bindgen_futures::JsFuture;
 
-static CSS: Asset = asset!("/assets/main.css");
-
 const DEFAULT_EXCLUDED_PREFIXES: &str = "build(deps):\nbuild(deps-dev):\nhotfix:";
 
 fn parse_excluded_prefixes(input: &str) -> Vec<String> {
@@ -178,8 +176,6 @@ fn app() -> Element {
                 }
             }
         }
-
-        document::Stylesheet { href: CSS }
     )
 }
 

@@ -31,9 +31,14 @@ import re
 index = Path("docs/index.html")
 html = index.read_text()
 html = html.replace("/./assets/", "./assets/")
+html = html.replace('href="assets/main.css"', 'href="./assets/main.css"')
 index.write_text(html)
 
-for js_path in Path("docs/assets").glob("*.js"):
+assets_dir = Path("docs/assets")
+assets_dir.mkdir(parents=True, exist_ok=True)
+(assets_dir / "main.css").write_text(Path("assets/main.css").read_text())
+
+for js_path in assets_dir.glob("*.js"):
     text = js_path.read_text()
     text = re.sub(r'/\./assets/([^"\']+\.wasm)', r'./assets/\1', text)
     js_path.write_text(text)
