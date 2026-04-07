@@ -7,5 +7,8 @@ edition = "2021"
 
 [dependencies]
 dioxus = { version = "0.7", features = ["web"] }
+gloo-timers = { version = "0.3.0", features = ["futures"] }
 regex = "1.12.3"
 wasm-bindgen = "0.2.117"
+wasm-bindgen-futures = "0.4.55"
+web-sys = { version = "0.3.82", features = ["Clipboard", "Navigator", "Window"] }
